@@ -1,0 +1,159 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Centrado de contenido en toda la página */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  background-color: #f4f7fc;
+  min-height: 100vh;
+  margin-top: 0; /* Asegura que el contenido empiece desde arriba */
+  scroll-behavior: smooth; /* Suaviza el desplazamiento al cargar la página */
+}
+
+/* Estilo para los encabezados */
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+p {
+  font-size: 1.2em;
+  margin-top: 10px;
+  color: #666;
+}
+
+/* Estilos generales para los botones */
+button {
+  padding: 12px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s ease, box-shadow 0.2s ease;
+  margin: 10px 0; /* Reduce el espaciado entre los botones */
+  width: 220px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Efecto hover para los botones */
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos de botones de login y registro */
+.register-link {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.register-link:hover {
+  background-color: #45a049;
+}
+
+.back-to-login {
+  background-color: #f44336;
+  color: white;
+}
+
+.back-to-login:hover {
+  background-color: #e53935;
+}
+
+/* Estilo para el botón de logout */
+.logout-button {
+  background-color: #007BFF;
+  color: white;
+}
+
+.logout-button:hover {
+  background-color: #0056b3;
+}
+
+/* Estilo para los formularios */
+input, select, textarea {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  width: 100%;
+  max-width: 300px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+/* Diseño de la lista de usuarios */
+.users-list {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+.users-list th, .users-list td {
+  padding: 12px;
+  text-align: left;
+}
+
+.users-list th {
+  background-color: #007BFF;
+  color: white;
+}
+
+.users-list tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.users-list tr:hover {
+  background-color: #f1f1f1;
+}
