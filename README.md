@@ -1,70 +1,331 @@
-# Getting Started with Create React App
+A continuación, te proporciono una documentación paso a paso para tu proyecto en React, organizando tu código y añadiendo detalles sobre cómo configurar y ejecutar tu proyecto:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Proyecto de React: Sistema de Gestión de Usuarios
 
-## Available Scripts
+Este proyecto es una aplicación de React para la gestión de usuarios, donde los usuarios pueden registrarse, iniciar sesión, editar su información y eliminar su cuenta. Utiliza un diseño de formularios para crear y editar usuarios y realizar la paginación para la lista de usuarios.
 
-In the project directory, you can run:
+## Estructura del Proyecto
 
-### `npm start`
+```
+/src
+|-- /components
+|   |-- LoginForm.jsx
+|   |-- UserCreateForm.jsx
+|   |-- UserEditForm.jsx
+|   |-- UsersList.jsx
+|
+|-- /hooks
+|   |-- useUsers.js
+|
+|-- /services
+|   |-- UserService.js
+|
+|-- App.js
+|-- index.js
+|-- /styles
+|   |-- LoginForm.css
+|   |-- UserCreateForm.css
+|   |-- UserEditForm.css
+|   |-- style.css
+|
+/public
+|-- index.html
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Pasos para el Proyecto
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 1. Instalación de Dependencias
 
-### `npm test`
+Primero, debes asegurarte de que tienes `Node.js` y `npm` instalados en tu computadora. Si no los tienes, puedes descargarlos desde el [sitio oficial de Node.js](https://nodejs.org/).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Luego, abre una terminal y navega a la carpeta de tu proyecto y ejecuta los siguientes comandos para instalar las dependencias necesarias:
 
-### `npm run build`
+```bash
+npx create-react-app gestion-usuarios
+cd gestion-usuarios
+npm install react-icons
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Con esto, tendrás un proyecto básico de React creado y las dependencias necesarias para trabajar con los íconos (en este caso, `react-icons`) instaladas.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 2. Crear los Componentes
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Crea las carpetas necesarias y los archivos de componentes. La estructura del proyecto en `src` se divide en tres carpetas principales: `components`, `hooks`, y `services`.
 
-### `npm run eject`
+#### 2.1. Componente `LoginForm.js`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Este componente muestra el formulario de inicio de sesión y gestiona la validación y el envío de la información para el login.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**LoginForm.js**:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```jsx
+import React, { useState } from "react";
+import './LoginForm.css';
+import { FaUser, FaLock } from "react-icons/fa";
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+const LoginForm = ({ onLogin, onShowRegister }) => {
+    const [correo, setCorreo] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-## Learn More
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+        if (!correo || !password) {
+            setError("Por favor, ingresa todos los campos.");
+            return;
+        }
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+        try {
+            const success = await onLogin({ correo, password });
+            console.log("Resultado de onLogin:", success);
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error);
+            setError("Ocurrió un error. Intenta nuevamente.");
+        }
+    };
 
-### Code Splitting
+    return (
+        <div className="login-page">
+            <div className="login-container">
+                <h2>Iniciar Sesión</h2>
+                {error && <p className="error-message">{error}</p>}
+                <form className="user-form" onSubmit={handleSubmit}>
+                    <div className="input-group">
+                        <FaUser className="icon" />
+                        <input
+                            className="input-field"
+                            type="email"
+                            value={correo}
+                            onChange={(e) => setCorreo(e.target.value)}
+                            required
+                            placeholder="Correo Electrónico"
+                        />
+                    </div>
+                    <div className="input-group">
+                        <FaLock className="icon" />
+                        <input
+                            className="input-field"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            placeholder="Contraseña"
+                        />
+                    </div>
+                    <div className="form-buttons">
+                        <button className="submit-button" type="submit">Iniciar Sesión</button>
+                    </div>
+                </form>
+                <div className="register-link-container">
+                    <p>¿No tienes cuenta? <button onClick={onShowRegister} className="register-link">Regístrate</button></p>
+                </div>
+            </div>
+        </div>
+    );
+};
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+export default LoginForm;
+```
 
-### Analyzing the Bundle Size
+#### 2.2. Otros Componentes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Sigue el mismo patrón para los demás componentes como `UserCreateForm`, `UserEditForm`, `UsersList`. La estructura de cada uno de estos componentes es similar, y gestionan formularios para crear o editar usuarios, y una lista paginada de usuarios.
 
-### Making a Progressive Web App
+#### 2.3. Hook `useUsers.js`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+El hook `useUsers.js` gestiona la lógica de obtener, agregar, editar y eliminar usuarios. Este hook utiliza funciones de servicio que interactúan con el backend de tu aplicación (por ejemplo, usando `fetch` o `axios`).
 
-### Advanced Configuration
+```jsx
+import { useState, useEffect } from 'react';
+import { getAllUsers, createUser, updateUser, deleteUser, checkEmailExists, loginUser } from '../services/UserService';
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+export default function useUsers() {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-### Deployment
+    useEffect(() => {
+        fetchUsers();
+    }, []);
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+    const fetchUsers = async () => {
+        try {
+            const data = await getAllUsers();
+            const validUsers = data.filter(user => user.id && user.name);
+            setUsers(validUsers);
+        } catch (error) {
+            console.error("Error al obtener usuarios:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-### `npm run build` fails to minify
+    const addUser = async (user) => {
+        try {
+            const newUser = await createUser(user);
+            setUsers((prevUsers) => [...prevUsers, newUser]);
+        } catch (error) {
+            console.error("Error al agregar usuario:", error);
+        }
+    };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    const editUser = async (userId, userData) => {
+        await updateUser(userId, userData);
+        fetchUsers();
+    };
+
+    const deleteUserDetails = async (userId) => {
+        try {
+            await deleteUser(userId);
+            setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+        } catch (error) {
+            console.error("Error al eliminar usuario:", error);
+        }
+    };
+
+    const login = async (email, password) => {
+        try {
+            const result = await loginUser(email, password);
+            if (result) {
+                console.log("Inicio de sesión exitoso:", result);
+                return result;
+            }
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error);
+        }
+    };
+
+    return { users, loading, addUser, editUser, deleteUserDetails, checkEmailExists, login };
+}
+```
+
+#### 2.4. Servicios `UserService.js`
+
+En esta capa, gestionas todas las interacciones con tu backend, realizando las peticiones HTTP para obtener, crear, actualizar y eliminar usuarios.
+
+```js
+const BASE_URL = "https://3.21.134.173/users/";
+
+export const getAllUsers = async () => {
+    const response = await fetch(BASE_URL);
+    return response.json();
+};
+
+export const createUser = async (user) => {
+    const response = await fetch(BASE_URL, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    return response.json();
+};
+
+export const updateUser = async (id, userData) => {
+    const response = await fetch(`${BASE_URL}${id}`, {
+        method: "PUT",
+        body: JSON.stringify(userData),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    return response.json();
+};
+
+export const deleteUser = async (id) => {
+    const response = await fetch(`${BASE_URL}${id}`, {
+        method: "DELETE",
+    });
+    return response.json();
+};
+
+export const checkEmailExists = async (email) => {
+    const response = await fetch(`${BASE_URL}check-email`, {
+        method: "POST",
+        body: JSON.stringify({ email }),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    return response.json();
+};
+
+export const loginUser = async (email, password) => {
+    const response = await fetch(`${BASE_URL}login`, {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    return response.json();
+};
+```
+
+### 3. Integración en `App.js`
+
+Ahora que tienes todos los componentes, puedes integrarlos en `App.js`. Aquí es donde manejarás la lógica de mostrar los formularios y las vistas.
+
+```jsx
+import React, { useState } from 'react';
+import LoginForm from './components/LoginForm';
+import UserCreateForm from './components/UserCreateForm';
+import UsersList from './components/UsersList';
+import useUsers from './hooks/useUsers';
+
+function App() {
+  const [showLogin, setShowLogin] = useState(true);
+  const [showRegister, setShowRegister] = useState(false);
+  const { users, addUser, editUser, deleteUserDetails, login } = useUsers();
+
+  const handleLogin = async ({ correo, password }) => {
+    const result = await login(correo, password);
+    if (result) {
+      // Lógica después de iniciar sesión correctamente
+    }
+  };
+
+  return (
+    <div className="App">
+      {showLogin && !showRegister ? (
+        <LoginForm onLogin={handleLogin} onShowRegister={() => setShowRegister(true)} />
+      ) : (
+        <UserCreateForm
+          onCreate={addUser}
+          checkEmailExists={async (email) => await checkEmailExists(email)}
+        />
+      )}
+      <UsersList
+        users={users}
+        onEdit={(user) => console.log('Editar usuario', user)}
+        onDelete={deleteUserDetails}
+      />
+    </div>
+  );
+}
+
+export default App;
+```
+
+### 4. Estilos y CSS
+
+No olvides crear los archivos de CSS como `LoginForm.css`, `UserCreateForm.css`, etc., para dar estilo a tu aplicación.
+
+---
+
+### 5. Ejecutar el Proyecto
+
+Una vez que hayas completado todos los pasos anteriores, ejecuta el proyecto en tu entorno local con:
+
+```bash
+npm start
+```
+
+Tu aplicación debería estar corriendo en `http://localhost:3000`.
+
+---
+
+## Conclusión
+
+Con estos pasos, has creado una aplicación básica de gestión de usuarios en React que incluye inicio de sesión, creación y edición de usuarios, y paginación para la lista de usuarios. La arquitectura está organizada y facilita la expansión del proyecto en el futuro.
